@@ -84,6 +84,33 @@ class PowerById(Resource):
 
 api.add_resource(PowerById, "/powers/<int:id>")
 
+lass HeroPowerResource(Resource):
+    def post(self):
+        data = request.json
+        strength = data.get('strength')
+        power_id = dacta.get('power_id')
+        hero_id = data.get('hero_id')
+
+        if not (strength and power_id and hero_id):
+            return make_response(jsonify({"errors": ["Missing required fields"]}), 400)
+
+        power = Power.query.get(power_id)
+        hero = Hero.query.get(hero_id)
+
+        if not (power and hero):
+            return make_response(jsonify({"errors": ["Invalid Power or Hero ID"]}), 400)
+
+        hero_power = HeroPower(strength=strength, hero=hero, power=power)
+
+        try:
+            db.session.add(hero_power)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return make_response(jsonify({"errors": ["Failed to create HeroPower"]}), 500)
+
+        return make_response(jsonify({"message": "HeroPower created successfully"}), 201)
+api.add_resource(HeroPowerResource, '/hero_powers')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
