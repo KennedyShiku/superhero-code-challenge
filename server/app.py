@@ -84,11 +84,11 @@ class PowerById(Resource):
 
 api.add_resource(PowerById, "/powers/<int:id>")
 
-lass HeroPowerResource(Resource):
+class HeroPowerResource(Resource):
     def post(self):
         data = request.json
         strength = data.get('strength')
-        power_id = dacta.get('power_id')
+        power_id = data.get('power_id')
         hero_id = data.get('hero_id')
 
         if not (strength and power_id and hero_id):
