@@ -8,7 +8,7 @@ function HeroPowerForm() {
   const [powerId, setPowerId] = useState("");
   const [strength, setStrength] = useState("");
   const [formErrors, setFormErrors] = useState([]);
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/heroes")
@@ -37,7 +37,7 @@ function HeroPowerForm() {
       body: JSON.stringify(formData),
     }).then((r) => {
       if (r.ok) {
-        history.push(`/heroes/${heroId}`);
+        navigate(`/heroes/${heroId}`);
       } else {
         r.json().then((err) => setFormErrors(err.errors));
       }
